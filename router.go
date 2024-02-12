@@ -20,7 +20,7 @@ func (fn RouterFunc) Route(ctx context.Context, msg Message) (Handler, error) {
 	return fn(ctx, msg)
 }
 
-// Handle delegates message processing to the appropriate [Handler] determined by the [Route] method.
+// Handle delegates message processing to the appropriate [Handler] determined by the Route method.
 func (fn RouterFunc) Handle(ctx context.Context, msg Message) error {
 	h, err := fn(ctx, msg)
 	if err != nil {
@@ -43,7 +43,7 @@ func (r StaticRouterByTopic) Route(_ context.Context, msg Message) (Handler, err
 	return h, nil
 }
 
-// Handle delegates message processing to the appropriate [Handler] determined by the [Route] method.
+// Handle delegates message processing to the appropriate [Handler] determined by the Route method.
 func (r StaticRouterByTopic) Handle(ctx context.Context, msg Message) error {
 	return RouterFunc(r.Route).Handle(ctx, msg)
 }

@@ -41,4 +41,3 @@ coverage: test
 .PHONY: lint
 lint: prepare
 	$(GOLANGCI_LINT) run -v
-
