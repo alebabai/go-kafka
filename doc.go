@@ -1,2 +1,2 @@
-// Package kafka provides a set of universal interfaces, transport abstractions and utilities designed to streamline the processing of Apache Kafka messages.
+// Package kafka provides a set of abstractions and utilities designed to simplify and unify the processing of Apache Kafka messages.
 package kafka

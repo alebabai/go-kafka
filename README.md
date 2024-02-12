@@ -1,6 +1,6 @@
 # go-kafka
 
-> Apache Kafka integration module designed to streamline message processing workflows
+> A module designed to simplify and unify Apache Kafka message processing
 
 [![build](https://img.shields.io/github/actions/workflow/status/alebabai/go-kafka/ci.yml)](https://github.com/alebabai/go-kafka/actions?query=workflow%3ACI)
 [![version](https://img.shields.io/github/go-mod/go-version/alebabai/go-kafka)](https://go.dev/)
