@@ -34,7 +34,7 @@ func (fn RouterFunc) Handle(ctx context.Context, msg Message) error {
 type StaticRouterByTopic map[string]Handler
 
 // Route resolves a [Handler] based on the message's topic.
-func (r StaticRouterByTopic) Route(ctx context.Context, msg Message) (Handler, error) {
+func (r StaticRouterByTopic) Route(_ context.Context, msg Message) (Handler, error) {
 	h, ok := r[msg.GetTopic()]
 	if !ok {
 		return nil, errors.New("failed resolve handler by topic")
