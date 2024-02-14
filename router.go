@@ -15,7 +15,7 @@ type Router interface {
 // RouterFunc type is an adapter that allow the use of ordinary function as a [Router].
 type RouterFunc func(ctx context.Context, msg Message) (Handler, error)
 
-// Route calls itself passing the [context.Context] and the [Message] through.
+// Route calls itself passing all arguments through.
 func (fn RouterFunc) Route(ctx context.Context, msg Message) (Handler, error) {
 	return fn(ctx, msg)
 }

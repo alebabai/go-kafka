@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// Message is a Kafka message interface.
+// Message is a Apache Kafka message interface.
 type Message interface {
 	GetTopic() string
 	GetPartition() int32
@@ -15,7 +15,7 @@ type Message interface {
 	GetTimestamp() time.Time
 }
 
-// Header is a Kafka header interface.
+// Header is a Apache Kafka header interface.
 type Header interface {
 	GetKey() []byte
 	GetValue() []byte
