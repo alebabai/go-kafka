@@ -23,3 +23,8 @@ Golang import:
 
 ```go
 import "github.com/alebabai/go-kafka"
+```
+
+## Usage
+
+To take advantage of the abstractions provided by this module, please implement the converters defined in [converter.go](./converter.go) for the types specific to your Apache Kafka client library.
