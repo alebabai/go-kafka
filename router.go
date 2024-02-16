@@ -35,7 +35,7 @@ type StaticRouterByTopic map[string]Handler
 
 // Route resolves a [Handler] based on the message's topic.
 func (r StaticRouterByTopic) Route(_ context.Context, msg Message) (Handler, error) {
-	h, ok := r[msg.GetTopic()]
+	h, ok := r[msg.Topic]
 	if !ok {
 		return nil, errors.New("failed resolve handler by topic")
 	}

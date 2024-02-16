@@ -4,19 +4,21 @@ import (
 	"time"
 )
 
-// Message is a Apache Kafka message interface.
-type Message interface {
-	GetTopic() string
-	GetPartition() int32
-	GetOffset() int64
-	GetKey() []byte
-	GetValue() []byte
-	GetHeaders() []Header
-	GetTimestamp() time.Time
+// Message is a Apache Kafka message object.
+type Message struct {
+	Key   []byte
+	Value []byte
+
+	Topic     string
+	Partition int32
+	Offset    int64
+
+	Headers   []Header
+	Timestamp time.Time
 }
 
-// Header is a Apache Kafka header interface.
-type Header interface {
-	GetKey() []byte
-	GetValue() []byte
+// Header is a Apache Kafka header object.
+type Header struct {
+	Key   []byte
+	Value []byte
 }
