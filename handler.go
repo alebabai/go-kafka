@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-// Handler is an interface for processing Kafka messages.
+// Handler is an interface for processing Apache Kafka messages.
 type Handler interface {
 	Handle(ctx context.Context, msg Message) error
 }
