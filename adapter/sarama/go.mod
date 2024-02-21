@@ -4,7 +4,7 @@ go 1.22.0
 
 require (
 	github.com/IBM/sarama v1.42.2
-	github.com/alebabai/go-kafka v0.2.3
+	github.com/alebabai/go-kafka v0.3.0
 )
 
 require (
