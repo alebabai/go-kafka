@@ -1,6 +1,6 @@
 module github.com/alebabai/go-kafka/adapter/sarama
 
-go 1.22.0
+go 1.22
 
 require (
 	github.com/IBM/sarama v1.42.2
