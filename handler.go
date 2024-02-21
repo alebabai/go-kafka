@@ -9,7 +9,7 @@ type Handler interface {
 	Handle(ctx context.Context, msg Message) error
 }
 
-// HandlerFunc type is an adapter that allows the use of ordinary functions as a [Handler].
+// HandlerFunc is an adapter type that allows the use of ordinary functions as a [Handler].
 type HandlerFunc func(ctx context.Context, msg Message) error
 
 // Handle calls itself passing all arguments through.
