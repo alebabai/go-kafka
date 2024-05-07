@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/IBM/sarama"
+
 	"github.com/alebabai/go-kafka"
 	"github.com/alebabai/go-kafka/adapter"
 )
