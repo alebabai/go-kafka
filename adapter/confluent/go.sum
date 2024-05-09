@@ -12,8 +12,8 @@ github.com/Microsoft/go-winio v0.6.1 h1:9/kr64B9VUZrLm5YYwbGtUJnMgqWVOdUAXu6Migc
 github.com/Microsoft/go-winio v0.6.1/go.mod h1:LRdKpFKfdobln8UmuiYcKPot9D2v6svN5+sAH+4kjUM=
 github.com/Microsoft/hcsshim v0.11.4 h1:68vKo2VN8DE9AdN4tnkWnmdhqdbpUFM8OF3Airm7fz8=
 github.com/Microsoft/hcsshim v0.11.4/go.mod h1:smjE4dvqPX9Zldna+t5FG3rnoHhaB7QYxPRqGcpAD9w=
-github.com/alebabai/go-kafka v0.3.1 h1:R3vA+5xIv3evjQFIFV3MZCvZcEdn89gH+fl6ZMiFTck=
-github.com/alebabai/go-kafka v0.3.1/go.mod h1:s3tF1Jkubb+rQoIXZJCx1+yZjLSuK/HEAOl2rHs2zyY=
+github.com/alebabai/go-kafka v0.3.2 h1:koxUxpPlN4PmFztJ8ilcOCmVDbZ6780qc/3utcW6xrk=
+github.com/alebabai/go-kafka v0.3.2/go.mod h1:s3tF1Jkubb+rQoIXZJCx1+yZjLSuK/HEAOl2rHs2zyY=
 github.com/aws/aws-sdk-go-v2 v1.17.6 h1:Y773UK7OBqhzi5VDXMi1zVGsoj+CVHs2eaC2bDsLwi0=
 github.com/aws/aws-sdk-go-v2 v1.17.6/go.mod h1:uzbQtefpm44goOPmdKyAlXSNcwlRgF3ePWVW6EtJvvw=
 github.com/aws/aws-sdk-go-v2/config v1.18.16 h1:4r7gsCu8Ekwl5iJGE/GmspA2UifqySCCkyyyPFeWs3w=
