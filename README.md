@@ -1,6 +1,6 @@
 # go-kafka
 
-> An abstract middleware that unifies Apache Kafka message processing across various libraries
+> A middleware that unifies Apache Kafka message processing across various libraries
 
 [![build](https://img.shields.io/github/actions/workflow/status/alebabai/go-kafka/ci.yml)](https://github.com/alebabai/go-kafka/actions?query=workflow%3ACI)
 [![version](https://img.shields.io/github/go-mod/go-version/alebabai/go-kafka)](https://go.dev/)
