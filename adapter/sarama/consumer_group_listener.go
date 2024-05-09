@@ -7,7 +7,7 @@ import (
 	"github.com/IBM/sarama"
 )
 
-// ConsumerGroupListener is responsible for message consumption of a [sarama.ConsumerGroup] via an infinite loop.
+// ConsumerGroupListener is responsible for message consumption from [sarama.ConsumerGroup] via an infinite loop.
 type ConsumerGroupListener struct {
 	consumerGroup        sarama.ConsumerGroup
 	consumerGroupHandler sarama.ConsumerGroupHandler
