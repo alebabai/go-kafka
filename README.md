@@ -32,4 +32,4 @@ To use the abstractions provided by this module, just implement the converters d
 By the way, here are the implementations for the most popular Apache Kafka client libraries that can be used independently or as reference examples.
 
 - **[IBM/sarama](https://github.com/IBM/sarama)** ([alebabai/go-kafka/adapter/sarama](./adapter/sarama))
-- **[confluentinc/confluent-kafka-go](https:/github.com/confluentinc/confluent-kafka-go)** ([alebabai/go-kafka/adapter/confluent](./adapter/confluent))
+- **[confluentinc/confluent-kafka-go](https://github.com/confluentinc/confluent-kafka-go)** ([alebabai/go-kafka/adapter/confluent](./adapter/confluent))
