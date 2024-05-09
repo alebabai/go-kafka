@@ -27,6 +27,9 @@ import "github.com/alebabai/go-kafka"
 
 ## Usage
 
-To use the abstractions provided by this module, please implement the converters defined in [adapter/converter.go](./adapter/converter.go) for the types specific to your Apache Kafka client library.
+To use the abstractions provided by this module, just implement the converters defined in [adapter/converter.go](./adapter/converter.go) for the types specific to your Apache Kafka client library.
 
-Additionally, here is an adapter implementation for the most popular Apache Kafka client library, [github.com/Shopify/sarama](github.com/Shopify/sarama). The module, named [github.com/alebabai/go-kafka/adapter/sarama](./adapter/sarama), can be used independently or as a reference example.
+By the way, here are the implementations for the most popular Apache Kafka client libraries that can be used independently or as reference examples.
+
+- **[IBM/sarama](https://github.com/IBM/sarama)** ([alebabai/go-kafka/adapter/sarama](./adapter/sarama))
+- **[confluentinc/confluent-kafka-go](https:/github.com/confluentinc/confluent-kafka-go)** ([alebabai/go-kafka/adapter/confluent](./adapter/confluent))
