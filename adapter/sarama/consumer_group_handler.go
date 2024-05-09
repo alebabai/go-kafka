@@ -17,6 +17,8 @@ type ConsumerGroupHandler struct {
 
 	setupHook   ConsumerGroupHandlerHookFunc
 	cleanupHook ConsumerGroupHandlerHookFunc
+
+	manualCommit bool
 }
 
 // ConsumerGroupHandlerHookFunc is a function for custom hooks across [sarama.ConsumerGroupSession] lifecycle events.
@@ -50,7 +52,7 @@ func NewConsumerGroupHandler(h kafka.Handler, opts ...ConsumerGroupHandlerOption
 // ConsumerGroupHandlerOption is a function type for setting optional parameters for the [ConsumerGroupHandler].
 type ConsumerGroupHandlerOption func(*ConsumerGroupHandler)
 
-// ConsumerGroupHandlerWithConverter is an option to set a customer message converter function.
+// ConsumerGroupHandlerWithConverter is an option to set a custom message converter function.
 func ConsumerGroupHandlerWithConverter(convFunc adapter.ToKafkaMessageConverterFunc[sarama.ConsumerMessage]) ConsumerGroupHandlerOption {
 	return func(cgh *ConsumerGroupHandler) {
 		cgh.converter = convFunc
@@ -68,6 +70,13 @@ func ConsumerGroupHandlerWithSetupHook(hookFunc ConsumerGroupHandlerHookFunc) Co
 func ConsumerGroupHandlerWithCleanupHook(hookFunc ConsumerGroupHandlerHookFunc) ConsumerGroupHandlerOption {
 	return func(cgh *ConsumerGroupHandler) {
 		cgh.cleanupHook = hookFunc
+	}
+}
+
+// ConsumerGroupHandlerWithManualCommit is an option to set manual commit flag.
+func ConsumerGroupHandlerWithManualCommit(manualCommit bool) ConsumerGroupHandlerOption {
+	return func(cgh *ConsumerGroupHandler) {
+		cgh.manualCommit = manualCommit
 	}
 }
 
@@ -98,6 +107,10 @@ func (cgh *ConsumerGroupHandler) ConsumeClaim(session sarama.ConsumerGroupSessio
 			}
 
 			session.MarkMessage(msg, "")
+
+			if cgh.manualCommit {
+				session.Commit()
+			}
 		}
 	}
 }
