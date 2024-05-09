@@ -22,15 +22,15 @@ func (err Error) Unwrap() error {
 
 // Handler is an interface for processing errors.
 type ErrorHandler interface {
-	Handle(ctx context.Context, err error)
+	Handle(ctx context.Context, err error) error
 }
 
 // ErrorHandlerFunc is an adapter type that allows the use of ordinary functions as an [ErrorHandler].
-type ErrorHandlerFunc func(ctx context.Context, err error)
+type ErrorHandlerFunc func(ctx context.Context, err error) error
 
 // Handle calls itself passing all arguments through.
-func (fn ErrorHandlerFunc) Handle(ctx context.Context, err error) {
-	fn(ctx, err)
+func (fn ErrorHandlerFunc) Handle(ctx context.Context, err error) error {
+	return fn(ctx, err)
 }
 
 // WrapErrorMiddleware returns a middleware that wraps errors with additional context using the Error type.
@@ -49,12 +49,14 @@ func WrapErrorMiddleware() Middleware {
 	}
 }
 
-// CatchErrorMiddleware returns a middleware that catches and handles errors without propagation.
+// CatchErrorMiddleware returns a middleware that catches and handles errors with an [ErrorHandler].
 func CatchErrorMiddleware(eh ErrorHandler) Middleware {
 	return func(next Handler) Handler {
 		return HandlerFunc(func(ctx context.Context, msg Message) error {
 			if err := next.Handle(ctx, msg); err != nil {
-				eh.Handle(ctx, err)
+				if err := eh.Handle(ctx, err); err != nil {
+					return err
+				}
 			}
 
 			return nil
