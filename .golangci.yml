@@ -1,16 +1,18 @@
-# options for analysis running
-run:
-  # timeout for analysis, e.g. 30s, 5m, default is 1m
-  timeout: 3m
+version: "2"
 
-linters-settings:
-  goimports:
-    # put imports beginning with prefix after 3rd-party packages;
-    # it's a comma-separated list of prefixes
-    local-prefixes: github.com/alebabai/go-kafka
+run:
+  timeout: 3m
 
 linters:
   enable:
+    - govet
+    - revive
+
+formatters:
+  enable:
     - gofmt
     - goimports
-    - revive
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/alebabai/go-kafka
