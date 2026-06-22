@@ -1,3 +1,3 @@
 module github.com/alebabai/go-kafka
 
-go 1.22
+go 1.26

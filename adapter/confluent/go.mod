@@ -1,6 +1,6 @@
 module github.com/alebabai/go-kafka/adapter/confluent
 
-go 1.22
+go 1.26
 
 require (
 	github.com/alebabai/go-kafka v0.3.2
