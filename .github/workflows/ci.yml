@@ -5,29 +5,21 @@ on:
 
 jobs:
   pipeline:
-    name: pipiline
+    name: pipeline
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: 1.22
-      - run: go version
-      - uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
+          go-version-file: go.mod
+          cache: true
       - name: Lint
-        uses: golangci/golangci-lint-action@v4
+        uses: golangci/golangci-lint-action@v7
         with:
-          version: v1.56.2
+          version: v2.12.2
       - name: Build
         run: make build
       - name: Test
         run: make test
-      - uses: codecov/codecov-action@v4
+      - uses: codecov/codecov-action@v5
