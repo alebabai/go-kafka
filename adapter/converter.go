@@ -4,17 +4,27 @@ import (
 	"github.com/alebabai/go-kafka"
 )
 
-// ConverterFunc is a generic function type for transforming a value of type S to type D.
-type ConverterFunc[S, D any] func(S) D
+// Converter is a generic interface for transforming a value of type S into type D.
+type Converter[S, D any] interface {
+	Convert(src S) (D, error)
+}
 
-// ToKafkaMessageConverterFunc is a [ConverterFunc] for transforming a value of type S into a [Message].
-type ToKafkaMessageConverterFunc[S any] ConverterFunc[S, kafka.Message]
+// ConverterFunc is an adapter to use plain functions as [Converter].
+type ConverterFunc[S, D any] func(S) (D, error)
 
-// FromKafkaMessageConverterFunc is a [ConverterFunc] for transforming a [Message] into a value of type D.
-type FromKafkaMessageConverterFunc[D any] ConverterFunc[kafka.Message, D]
+// Convert calls itself passing all arguments through.
+func (fn ConverterFunc[S, D]) Convert(src S) (D, error) {
+	return fn(src)
+}
 
-// ToKafkaHeaderConverterFunc is a [ConverterFunc] for transforming a value of type S into a [Header].
-type ToKafkaHeaderConverterFunc[S any] ConverterFunc[S, kafka.Header]
+// ToKafkaMessageConverter is a [Converter] for transforming a value of type S into a [Message].
+type ToKafkaMessageConverter[S any] = Converter[S, kafka.Message]
 
-// FromKafkaHeaderConverterFunc is a ConverterFunc for transforming a [Header] into a value of type D.
-type FromKafkaHeaderConverterFunc[D any] ConverterFunc[kafka.Header, D]
+// FromKafkaMessageConverter is a [Converter] for transforming a [Message] into a value of type D.
+type FromKafkaMessageConverter[D any] = Converter[kafka.Message, D]
+
+// ToKafkaHeaderConverter is a [Converter] for transforming a value of type S into a [Header].
+type ToKafkaHeaderConverter[S any] = Converter[S, kafka.Header]
+
+// FromKafkaHeaderConverter is a [Converter] for transforming a [Header] into a value of type D.
+type FromKafkaHeaderConverter[D any] = Converter[kafka.Header, D]
