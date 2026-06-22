@@ -1,13 +1,15 @@
 package sarama
 
 import (
+	"fmt"
+
 	"github.com/IBM/sarama"
 	"github.com/alebabai/go-kafka"
 )
 
 // ConvertConsumerMessageToKafkaMessage transforms a [sarama.ConsumerMessage] into a [kafka.Message].
-func ConvertConsumerMessageToKafkaMessage(in sarama.ConsumerMessage) kafka.Message {
-	hs := make([]kafka.Header, 0)
+func ConvertConsumerMessageToKafkaMessage(in sarama.ConsumerMessage) (kafka.Message, error) {
+	hs := make([]kafka.Header, 0, len(in.Headers))
 	for _, h := range in.Headers {
 		hs = append(hs, ConvertRecordHeaderToKafkaHeader(*h))
 	}
@@ -20,15 +22,22 @@ func ConvertConsumerMessageToKafkaMessage(in sarama.ConsumerMessage) kafka.Messa
 		Offset:    in.Offset,
 		Headers:   hs,
 		Timestamp: in.Timestamp,
-	}
+	}, nil
 }
 
 // ConvertProducerMessageToKafkaMessage transforms a [sarama.ProducerMessage] into a [kafka.Message].
-func ConvertProducerMessageToKafkaMessage(in sarama.ProducerMessage) kafka.Message {
-	k, _ := in.Key.Encode()
-	v, _ := in.Value.Encode()
+func ConvertProducerMessageToKafkaMessage(in sarama.ProducerMessage) (kafka.Message, error) {
+	k, err := in.Key.Encode()
+	if err != nil {
+		return kafka.Message{}, fmt.Errorf("failed to encode message key: %w", err)
+	}
 
-	hs := make([]kafka.Header, 0)
+	v, err := in.Value.Encode()
+	if err != nil {
+		return kafka.Message{}, fmt.Errorf("failed to encode message value: %w", err)
+	}
+
+	hs := make([]kafka.Header, 0, len(in.Headers))
 	for _, h := range in.Headers {
 		hs = append(hs, ConvertRecordHeaderToKafkaHeader(h))
 	}
@@ -41,7 +50,7 @@ func ConvertProducerMessageToKafkaMessage(in sarama.ProducerMessage) kafka.Messa
 		Offset:    in.Offset,
 		Headers:   hs,
 		Timestamp: in.Timestamp,
-	}
+	}, nil
 }
 
 // ConvertRecordHeaderToKafkaHeader transforms a [sarama.RecordHeader] into a [kafka.Header].
@@ -53,8 +62,8 @@ func ConvertRecordHeaderToKafkaHeader(in sarama.RecordHeader) kafka.Header {
 }
 
 // ConvertKafkaMessageToConsumerMessage transforms a [kafka.Message] into a [sarama.ConsumerMessage].
-func ConvertKafkaMessageToConsumerMessage(in kafka.Message) sarama.ConsumerMessage {
-	hs := make([]*sarama.RecordHeader, 0)
+func ConvertKafkaMessageToConsumerMessage(in kafka.Message) (sarama.ConsumerMessage, error) {
+	hs := make([]*sarama.RecordHeader, 0, len(in.Headers))
 	for _, h := range in.Headers {
 		rh := ConvertKafkaHeaderToRecordHeader(h)
 		hs = append(hs, &rh)
@@ -68,12 +77,12 @@ func ConvertKafkaMessageToConsumerMessage(in kafka.Message) sarama.ConsumerMessa
 		Offset:    in.Offset,
 		Timestamp: in.Timestamp,
 		Headers:   hs,
-	}
+	}, nil
 }
 
 // ConvertKafkaMessageToProducerMessage transforms a [kafka.Message] into a [sarama.ProducerMessage].
-func ConvertKafkaMessageToProducerMessage(in kafka.Message) sarama.ProducerMessage {
-	hs := make([]sarama.RecordHeader, 0)
+func ConvertKafkaMessageToProducerMessage(in kafka.Message) (sarama.ProducerMessage, error) {
+	hs := make([]sarama.RecordHeader, 0, len(in.Headers))
 	for _, h := range in.Headers {
 		hs = append(hs, ConvertKafkaHeaderToRecordHeader(h))
 	}
@@ -86,7 +95,7 @@ func ConvertKafkaMessageToProducerMessage(in kafka.Message) sarama.ProducerMessa
 		Offset:    in.Offset,
 		Headers:   hs,
 		Timestamp: in.Timestamp,
-	}
+	}, nil
 }
 
 // ConvertKafkaHeaderToRecordHeader transforms a [kafka.Header] into a [sarama.RecordHeader].

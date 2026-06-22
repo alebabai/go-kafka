@@ -13,7 +13,7 @@ import (
 type ConsumerGroupHandler struct {
 	handler kafka.Handler
 
-	converter adapter.ToKafkaMessageConverterFunc[sarama.ConsumerMessage]
+	converter adapter.ToKafkaMessageConverter[sarama.ConsumerMessage]
 
 	setupHook   ConsumerGroupHandlerHookFunc
 	cleanupHook ConsumerGroupHandlerHookFunc
@@ -33,7 +33,7 @@ func ConsumerGroupHandlerEmptyHook(_ sarama.ConsumerGroupSession) error {
 func NewConsumerGroupHandler(h kafka.Handler, opts ...ConsumerGroupHandlerOption) (*ConsumerGroupHandler, error) {
 	cgh := &ConsumerGroupHandler{
 		handler:     h,
-		converter:   ConvertConsumerMessageToKafkaMessage,
+		converter:   adapter.ConverterFunc[sarama.ConsumerMessage, kafka.Message](ConvertConsumerMessageToKafkaMessage),
 		setupHook:   ConsumerGroupHandlerEmptyHook,
 		cleanupHook: ConsumerGroupHandlerEmptyHook,
 	}
@@ -52,10 +52,10 @@ func NewConsumerGroupHandler(h kafka.Handler, opts ...ConsumerGroupHandlerOption
 // ConsumerGroupHandlerOption is a function type for setting optional parameters for the [ConsumerGroupHandler].
 type ConsumerGroupHandlerOption func(*ConsumerGroupHandler)
 
-// ConsumerGroupHandlerWithConverter is an option to set a custom message converter function.
-func ConsumerGroupHandlerWithConverter(convFunc adapter.ToKafkaMessageConverterFunc[sarama.ConsumerMessage]) ConsumerGroupHandlerOption {
+// ConsumerGroupHandlerWithConverter is an option to set a custom message converter.
+func ConsumerGroupHandlerWithConverter(c adapter.ToKafkaMessageConverter[sarama.ConsumerMessage]) ConsumerGroupHandlerOption {
 	return func(cgh *ConsumerGroupHandler) {
-		cgh.converter = convFunc
+		cgh.converter = c
 	}
 }
 
@@ -102,7 +102,12 @@ func (cgh *ConsumerGroupHandler) ConsumeClaim(session sarama.ConsumerGroupSessio
 				return nil
 			}
 
-			if err := cgh.handler.Handle(ctx, cgh.converter(*msg)); err != nil {
+			converted, err := cgh.converter.Convert(*msg)
+			if err != nil {
+				return fmt.Errorf("failed to convert message: %w", err)
+			}
+
+			if err := cgh.handler.Handle(ctx, converted); err != nil {
 				return fmt.Errorf("failed to handle message: %w", err)
 			}
 
