@@ -20,7 +20,7 @@ func (err Error) Unwrap() error {
 	return err.Err
 }
 
-// Handler is an interface for processing errors.
+// ErrorHandler is an interface for processing errors.
 type ErrorHandler interface {
 	Handle(ctx context.Context, err error) error
 }
