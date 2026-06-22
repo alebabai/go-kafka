@@ -22,7 +22,7 @@ type ConsumerListener struct {
 	consumer consumer
 	handler  kafka.Handler
 
-	converter adapter.ToKafkaMessageConverterFunc[ckafka.Message]
+	converter adapter.ToKafkaMessageConverter[ckafka.Message]
 
 	transportErrorHandler kafka.ErrorHandler
 	manualCommit          bool
@@ -37,7 +37,7 @@ func NewConsumerListener(
 	cl := &ConsumerListener{
 		consumer:              c,
 		handler:               h,
-		converter:             ConvertMessageToKafkaMessage,
+		converter:             adapter.ConverterFunc[ckafka.Message, kafka.Message](ConvertMessageToKafkaMessage),
 		transportErrorHandler: kafka.ErrorHandlerFunc(DefaultTransportErrorHandler),
 	}
 
@@ -55,10 +55,10 @@ func NewConsumerListener(
 // ConsumerListenerOption is a function type for setting optional parameters for the [ConsumerListener].
 type ConsumerListenerOption func(*ConsumerListener)
 
-// ConsumerListenerWithConverter is an option to set a custom message converter function.
-func ConsumerListenerWithConverter(convFunc adapter.ToKafkaMessageConverterFunc[ckafka.Message]) ConsumerListenerOption {
+// ConsumerListenerWithConverter is an option to set a custom message converter.
+func ConsumerListenerWithConverter(c adapter.ToKafkaMessageConverter[ckafka.Message]) ConsumerListenerOption {
 	return func(cl *ConsumerListener) {
-		cl.converter = convFunc
+		cl.converter = c
 	}
 }
 
@@ -92,7 +92,7 @@ func (cl *ConsumerListener) Listen(ctx context.Context, timeout time.Duration) e
 				continue
 			}
 
-			converted, err := cl.converter(*msg)
+			converted, err := cl.converter.Convert(*msg)
 			if err != nil {
 				return fmt.Errorf("failed to convert message: %w", err)
 			}

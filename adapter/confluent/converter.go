@@ -7,13 +7,13 @@ import (
 )
 
 // ConvertMessageToKafkaMessage transforms a [ckafka.Message] into a [kafka.Message].
-func ConvertMessageToKafkaMessage(in ckafka.Message) kafka.Message {
+func ConvertMessageToKafkaMessage(in ckafka.Message) (kafka.Message, error) {
 	var topic string
 	if in.TopicPartition.Topic != nil {
 		topic = *in.TopicPartition.Topic
 	}
 
-	hs := make([]kafka.Header, 0)
+	hs := make([]kafka.Header, 0, len(in.Headers))
 	for _, h := range in.Headers {
 		hs = append(hs, ConvertHeaderToKafkaHeader(h))
 	}
@@ -26,7 +26,7 @@ func ConvertMessageToKafkaMessage(in ckafka.Message) kafka.Message {
 		Offset:    int64(in.TopicPartition.Offset),
 		Headers:   hs,
 		Timestamp: in.Timestamp,
-	}
+	}, nil
 }
 
 // ConvertHeaderToKafkaHeader transforms a [ckafka.Header] into a [kafka.Header].
@@ -38,8 +38,8 @@ func ConvertHeaderToKafkaHeader(in ckafka.Header) kafka.Header {
 }
 
 // ConvertKafkaMessageToMessage transforms a [kafka.Message] into a [ckafka.Message].
-func ConvertKafkaMessageToMessage(in kafka.Message) ckafka.Message {
-	hs := make([]ckafka.Header, 0)
+func ConvertKafkaMessageToMessage(in kafka.Message) (ckafka.Message, error) {
+	hs := make([]ckafka.Header, 0, len(in.Headers))
 	for _, h := range in.Headers {
 		hs = append(hs, ConvertKafkaHeaderToHeader(h))
 	}
@@ -54,7 +54,7 @@ func ConvertKafkaMessageToMessage(in kafka.Message) ckafka.Message {
 		},
 		Timestamp: in.Timestamp,
 		Headers:   hs,
-	}
+	}, nil
 }
 
 // ConvertKafkaHeaderToHeader transforms a [kafka.Header] into a [ckafka.Header].
