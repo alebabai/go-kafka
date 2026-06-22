@@ -6,7 +6,7 @@ import (
 
 // Validate validates [ConsumerGroupHandler] and returns an error if validation is failed.
 func (cgh ConsumerGroupHandler) Validate() error {
-	errs := make([]error, 0)
+	var errs []error
 	if cgh.handler == nil {
 		errs = append(errs, errors.New("handler is required"))
 	}

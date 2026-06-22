@@ -88,9 +88,16 @@ func (cl *ConsumerListener) Listen(ctx context.Context, timeout time.Duration) e
 				if err := cl.transportErrorHandler.Handle(ctx, err); err != nil {
 					return fmt.Errorf("failed to read message: %w", err)
 				}
+
+				continue
 			}
 
-			if err := cl.handler.Handle(ctx, cl.converter(*msg)); err != nil {
+			converted, err := cl.converter(*msg)
+			if err != nil {
+				return fmt.Errorf("failed to convert message: %w", err)
+			}
+
+			if err := cl.handler.Handle(ctx, converted); err != nil {
 				return fmt.Errorf("failed to handle message: %w", err)
 			}
 
@@ -115,9 +122,5 @@ func (cl *ConsumerListener) Close() error {
 
 // DefaultTransportErrorHandler simply checks for an error and propagates it.
 func DefaultTransportErrorHandler(_ context.Context, err error) error {
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }

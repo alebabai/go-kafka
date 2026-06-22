@@ -6,7 +6,7 @@ import (
 
 // Validate validates [ConsumerGroupListener] and returns an error if validation is failed.
 func (cgh ConsumerGroupListener) Validate() error {
-	errs := make([]error, 0)
+	var errs []error
 	if cgh.consumerGroup == nil {
 		errs = append(errs, errors.New("consumerGroup is required"))
 	}

@@ -6,7 +6,7 @@ import (
 
 // Validate validates [ConsumerListener] and returns an error if validation is failed.
 func (cl ConsumerListener) Validate() error {
-	errs := make([]error, 0)
+	var errs []error
 	if cl.consumer == nil {
 		errs = append(errs, errors.New("consumer is required"))
 	}
